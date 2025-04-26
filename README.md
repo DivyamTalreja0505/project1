@@ -1,58 +1,58 @@
-```bash
-Multimodal Retrieval-Augmented Generation (RAG) System Using GPT-4o and LangChain
+# Multimodal Retrieval-Augmented Generation (RAG) System Using GPT-4o and LangChain
 
-This project implements a Multimodal Retrieval-Augmented Generation (RAG) system that extracts text, tables, and images from PDFs, summarizes each element using different LLMs (GPT-3.5-turbo, GPT-4o), stores the embeddings into a ChromaDB vector database, and allows semantic question answering using LangChain.
+# Project Description
+This project implements a Multimodal Retrieval-Augmented Generation (RAG) system to extract, summarize, and retrieve information from complex PDF files. It uses GPT-3.5-turbo and GPT-4o to process text, tables, and images. The system stores embeddings in ChromaDB for semantic search and preserves original files in InMemoryStore for complete retrieval. LangChain is used to build an end-to-end question-answering pipeline. The project extracts text, table structures, and images from PDFs using Unstructured and Tesseract OCR. Summarization of text and tables is handled by GPT-3.5-turbo, while image understanding is powered by GPT-4o. It supports semantic search, scalable retrieval, and a flexible architecture suitable for enterprise-grade analytics. Technologies used include Python 3.10+, LangChain, OpenAI APIs (GPT-3.5-Turbo, GPT-4o), ChromaDB, Unstructured, Pytesseract, and dotenv.
 
-Project Overview
-- PDF Parsing: Extracts text, table structures, and images from complex PDFs using Unstructured and Tesseract OCR.
-- Summarization: Text and Table summaries generated using GPT-3.5-Turbo, Image understanding using GPT-4o.
-- Storage: Summaries embedded and stored in ChromaDB, Original documents stored in InMemoryStore.
-- Retrieval-Augmented Question Answering (RAG): Queries answered using semantic retrieval based on stored summaries and context.
-
-Technologies Used
-- Python 3.10+
-- LangChain
-- OpenAI API (GPT-3.5-Turbo and GPT-4o)
-- ChromaDB
-- Unstructured
-- Pytesseract
-- dotenv
-
-Installation
+# Installation Steps
+# 1. Clone the Repository
 git clone https://github.com/yourusername/multimodal-rag-project.git
+
+# 2. Navigate to Project Folder
 cd multimodal-rag-project
+
+# 3. Create a Virtual Environment
 python -m venv env
-source env/bin/activate  # For Windows use: env\Scripts\activate
+
+# 4. Activate Virtual Environment
+# For Linux/Mac
+source env/bin/activate
+# For Windows
+env\Scripts\activate
+
+# 5. Install Requirements
 pip install -r requirements.txt
 
-Create a .env file:
+# Environment Setup
+# Create a .env file in the root folder with the following keys:
 OPENAI_API_KEY="your-openai-api-key-here"
 GROQ_API_KEY="your-groq-api-key-here"
 TAVILY_API_KEY="your-tavily-api-key-here"
 LANGCHAIN_API_KEY="your-langchain-api-key-here"
 LANGCHAIN_PROJECT="your-project-name-here"
 
-Install Tesseract OCR manually:
-For Windows: https://github.com/tesseract-ocr/tesseract
-For macOS: brew install tesseract
-For Linux: sudo apt install tesseract-ocr
+# Tesseract OCR Installation
+# Windows Download Link:
+https://github.com/tesseract-ocr/tesseract
+# macOS Installation
+brew install tesseract
+# Linux Installation
+sudo apt install tesseract-ocr
 
-How to Run
+# Running the Project
 python multimodal_rag_system.py
 
-Make sure your PDF is placed inside the project directory.
-If needed edit filename:
-filename=os.path.join(input_path, "startupai-financial-report-v2.pdf")
+# Make sure your PDF file is placed inside the project directory. Update the filename in the script if needed:
+filename = os.path.join(input_path, "startupai-financial-report-v2.pdf")
 
-Example Questions
-What do you see in the images?
-What is the name of the company?
-What is the product displayed in the image?
-How much are the total expenses of the company?
-What is the ROI?
-How much did the company sell in 2023 and 2022?
+# Example Questions Supported
+# - What do you see in the images?
+# - What is the name of the company?
+# - What is the product displayed in the image?
+# - How much are the total expenses of the company?
+# - What is the ROI?
+# - How much did the company sell in 2023 and 2022?
 
-Main Python Code Structure
+# Main Python Code Structure
 import os
 from dotenv import load_dotenv, find_dotenv
 from langchain_openai import ChatOpenAI
@@ -60,10 +60,8 @@ from unstructured.partition.pdf import partition_pdf
 import pytesseract
 
 _ = load_dotenv(find_dotenv())
-
 chain_gpt_35 = ChatOpenAI(model="gpt-3.5-turbo", max_tokens=1024)
 chain_gpt_4o = ChatOpenAI(model="gpt-4o", max_tokens=1024)
-
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 input_path = os.getcwd()
@@ -80,6 +78,7 @@ raw_pdf_elements = partition_pdf(
     image_output_dir_path=output_path,
 )
 
+# Summarization Functions
 from langchain.schema.messages import HumanMessage, AIMessage
 
 def summarize_text(text_element):
@@ -103,7 +102,7 @@ def summarize_image(encoded_image):
     response = chain_gpt_4o.invoke(prompt)
     return response.content
 
-Saving embeddings and documents
+# Saving Embeddings and Documents
 import uuid
 from langchain_openai import OpenAIEmbeddings
 from langchain.retrievers.multi_vector import MultiVectorRetriever
@@ -122,7 +121,7 @@ def add_documents_to_retriever(summaries, original_contents):
     retrieverv2.vectorstore.add_documents(summary_docs)
     retrieverv2.docstore.mset(list(zip(doc_ids, original_contents)))
 
-Building the final RAG chain
+# Building the Final RAG Chain
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
@@ -131,6 +130,7 @@ prompt_template = """Answer the question based only on the following context, wh
 {context}
 Question: {question}
 """
+
 prompt = ChatPromptTemplate.from_template(prompt_template)
 model = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
 
@@ -141,30 +141,27 @@ chain = (
     | StrOutputParser()
 )
 
+# Example Usage
 chain.invoke("What do you see in the images?")
 chain.invoke("What is the name of the company?")
 chain.invoke("What is the product displayed in the image?")
 
-Features
-- Full multimodal extraction from PDFs.
-- Summarization using specialized LLMs.
-- Semantic search with LangChain and ChromaDB.
-- OCR support with Tesseract.
-- End-to-end scalable architecture.
+# Features
+# - Multimodal extraction and summarization from PDFs
+# - Semantic search and retrieval powered by vector databases
+# - Vision and text processing using GPT-4o and GPT-3.5-turbo
+# - OCR-based extraction for scanned documents
+# - Scalable and flexible architecture with LangChain
 
-Learning Outcomes
-- Building advanced Multimodal RAG pipelines.
-- Integrating GPT-4o for vision and text understanding.
-- Implementing semantic retrieval and search systems.
-- Working with unstructured and structured data in AI.
+# Learning Outcomes
+# - Building practical Multimodal Retrieval-Augmented Generation systems
+# - Combining LLMs and vector search for enterprise applications
+# - Structuring unstructured data for advanced analytics and automation
 
-License
-This project is licensed under the MIT License.
+# License
+# This project is licensed under the MIT License.
 
-Contributing
-Contributions are welcome! Fork the repository, create a branch, and submit a pull request.
+# Contributing
+# Contributions are welcome. Fork the repository, create a branch, and submit a pull request.
 
-Connect
-Email: divyamtalreja16@gmail.com
-LinkedIn: https://linkedin.com/in/divyam-talreja/
-```
+
