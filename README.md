@@ -8,7 +8,7 @@ This project implements a Multimodal Retrieval-Augmented Generation (RAG) system
 git clone https://github.com/DivyamTalreja0505/project2
 
 # 2. Navigate to Project Folder
-cd llm-rag-project
+cd 001-Multimodel
 
 # 3. Create a Virtual Environment
 python -m venv env
