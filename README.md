@@ -5,10 +5,10 @@ This project implements a Multimodal Retrieval-Augmented Generation (RAG) system
 
 # Installation Steps
 # 1. Clone the Repository
-git clone https://github.com/yourusername/multimodal-rag-project.git
+git clone https://github.com/DivyamTalreja0505/project2
 
 # 2. Navigate to Project Folder
-cd multimodal-rag-project
+cd llm-rag-project
 
 # 3. Create a Virtual Environment
 python -m venv env
@@ -147,21 +147,21 @@ chain.invoke("What is the name of the company?")
 chain.invoke("What is the product displayed in the image?")
 
 # Features
-# - Multimodal extraction and summarization from PDFs
-# - Semantic search and retrieval powered by vector databases
-# - Vision and text processing using GPT-4o and GPT-3.5-turbo
-# - OCR-based extraction for scanned documents
-# - Scalable and flexible architecture with LangChain
+ - Multimodal extraction and summarization from PDFs
+ - Semantic search and retrieval powered by vector databases
+ - Vision and text processing using GPT-4o and GPT-3.5-turbo
+ - OCR-based extraction for scanned documents
+ - Scalable and flexible architecture with LangChain
 
 # Learning Outcomes
-# - Building practical Multimodal Retrieval-Augmented Generation systems
-# - Combining LLMs and vector search for enterprise applications
-# - Structuring unstructured data for advanced analytics and automation
+ - Building practical Multimodal Retrieval-Augmented Generation systems
+ - Combining LLMs and vector search for enterprise applications
+ - Structuring unstructured data for advanced analytics and automation
 
 # License
-# This project is licensed under the MIT License.
+ This project is licensed under the MIT License.
 
 # Contributing
-# Contributions are welcome. Fork the repository, create a branch, and submit a pull request.
+ Contributions are welcome. Fork the repository, create a branch, and submit a pull request.
 
 
